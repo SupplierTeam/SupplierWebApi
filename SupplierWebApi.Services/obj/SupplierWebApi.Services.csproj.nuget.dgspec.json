@@ -1,0 +1,331 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Services\\SupplierWebApi.Services.csproj": {}
+  },
+  "projects": {
+    "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Framework\\SupplierWebApi.Framework.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Framework\\SupplierWebApi.Framework.csproj",
+        "projectName": "SupplierWebApi.Framework",
+        "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Framework\\SupplierWebApi.Framework.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Framework\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Microsoft.Extensions.Hosting.Abstractions": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IRepositories\\SupplierWebApi.IRepositories.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IRepositories\\SupplierWebApi.IRepositories.csproj",
+        "projectName": "SupplierWebApi.IRepositories",
+        "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IRepositories\\SupplierWebApi.IRepositories.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IRepositories\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {
+              "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Models\\SupplierWebApi.Models.csproj": {
+                "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Models\\SupplierWebApi.Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IServices\\SupplierWebApi.IServices.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IServices\\SupplierWebApi.IServices.csproj",
+        "projectName": "SupplierWebApi.IServices",
+        "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IServices\\SupplierWebApi.IServices.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IServices\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {
+              "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Models\\SupplierWebApi.Models.csproj": {
+                "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Models\\SupplierWebApi.Models.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Models\\SupplierWebApi.Models.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Models\\SupplierWebApi.Models.csproj",
+        "projectName": "SupplierWebApi.Models",
+        "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Models\\SupplierWebApi.Models.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Models\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[3.1.0-preview2.19525.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[3.1.0-preview2.19525.5, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[3.0.0-rc1.final, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Services\\SupplierWebApi.Services.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Services\\SupplierWebApi.Services.csproj",
+        "projectName": "SupplierWebApi.Services",
+        "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Services\\SupplierWebApi.Services.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Services\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.0": {
+            "projectReferences": {
+              "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Framework\\SupplierWebApi.Framework.csproj": {
+                "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.Framework\\SupplierWebApi.Framework.csproj"
+              },
+              "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IRepositories\\SupplierWebApi.IRepositories.csproj": {
+                "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IRepositories\\SupplierWebApi.IRepositories.csproj"
+              },
+              "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IServices\\SupplierWebApi.IServices.csproj": {
+                "projectPath": "D:\\DZB\\SupplierTestNew\\SupplierTestNew\\SupplierWebApi.IServices\\SupplierWebApi.IServices.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.0": {
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

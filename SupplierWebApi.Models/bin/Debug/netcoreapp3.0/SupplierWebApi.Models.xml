@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SupplierWebApi.Models</name>
+    </assembly>
+    <members>
+        <member name="P:SupplierWebApi.Models.Dto.LoginDto.UserName">
+            <summary>
+            Gets or sets 用户名.
+            </summary>
+        </member>
+        <member name="P:SupplierWebApi.Models.Dto.LoginDto.Password">
+            <summary>
+            Gets or sets 密码.
+            </summary>
+        </member>
+        <member name="P:SupplierWebApi.Models.Dto.LoginDto.SystemId">
+            <summary>
+            Gets or sets 系统编号.
+            </summary>
+        </member>
+    </members>
+</doc>

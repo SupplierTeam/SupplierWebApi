@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SupplierWebApi</name>
+    </assembly>
+    <members>
+        <member name="M:SupplierWebApi.Controllers.UserController.Login(SupplierWebApi.Models.User)">
+            <summary>
+            登录
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
