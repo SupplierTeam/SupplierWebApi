@@ -1,8 +1,0 @@
-D:\DZB\SupplierTestNew\SupplierTestNew\SupplierWebApi.Dapper\bin\Debug\netcoreapp3.0\SupplierWebApi.Dapper.deps.json
-D:\DZB\SupplierTestNew\SupplierTestNew\SupplierWebApi.Dapper\bin\Debug\netcoreapp3.0\SupplierWebApi.Dapper.dll
-D:\DZB\SupplierTestNew\SupplierTestNew\SupplierWebApi.Dapper\obj\Debug\netcoreapp3.0\SupplierWebApi.Dapper.csprojAssemblyReference.cache
-D:\DZB\SupplierTestNew\SupplierTestNew\SupplierWebApi.Dapper\obj\Debug\netcoreapp3.0\SupplierWebApi.Dapper.AssemblyInfoInputs.cache
-D:\DZB\SupplierTestNew\SupplierTestNew\SupplierWebApi.Dapper\obj\Debug\netcoreapp3.0\SupplierWebApi.Dapper.AssemblyInfo.cs
-D:\DZB\SupplierTestNew\SupplierTestNew\SupplierWebApi.Dapper\bin\Debug\netcoreapp3.0\SupplierWebApi.Dapper.pdb
-D:\DZB\SupplierTestNew\SupplierTestNew\SupplierWebApi.Dapper\obj\Debug\netcoreapp3.0\SupplierWebApi.Dapper.dll
-D:\DZB\SupplierTestNew\SupplierTestNew\SupplierWebApi.Dapper\obj\Debug\netcoreapp3.0\SupplierWebApi.Dapper.pdb
