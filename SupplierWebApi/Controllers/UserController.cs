@@ -34,7 +34,10 @@ namespace SupplierWebApi.Controllers
         //[HttpPost("login")]
         //public async Task<IActionResult> Login(User user)
         //{
-
+        //throw new Exception("login error");
+        //bool result = false;
+        //string userId = await userService.LoginAsync(user.UserName, user.Password);
+        //    if (!string.IsNullOrEmpty(userId))
 
         //    if (!string.IsNullOrEmpty(user.UserName) && !string.IsNullOrEmpty(user.Password))
         //    {

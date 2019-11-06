@@ -22,6 +22,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using SupplierWebApi.Dapper.Connections;
 using SupplierWebApi.Framework;
@@ -32,9 +33,11 @@ namespace SupplierWebApi
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+           
         }
 
         public IConfiguration Configuration { get; }
@@ -65,23 +68,23 @@ namespace SupplierWebApi
             #endregion
 
         }
-
+       
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //依赖注入得到Apollo的配置实例，根据key（AppSetting）获取对应的配置文件的value，将其json序列化为对象
+            var config = JsonHelper.NewtonsoftDeserialize<ConfigMsg>(Configuration.GetSection("AppSetting").Value);
 
-            #region Dapper
+            //在apollo中配置文件是Json格式。项目中建立对于的实体
+            services.ConfigureJsonValue<ConfigMsg>(Configuration.GetSection("AppSetting"));
 
-
-
-            #endregion
 
 
             #region Mysql
             services.AddDbContextPool<SupplierdbContext>(options =>
             {
 
-                options.UseMySql(Configuration.GetConnectionString("SupBack"));
+                options.UseMySql(config.ConnectionStrings);
                 options.EnableSensitiveDataLogging(true);
             });
             #endregion
@@ -127,8 +130,8 @@ namespace SupplierWebApi
             #region FairLogs
             services.AddFairhrLogs(options =>
             {
-                options.Key = Configuration["Log:logkey"];
-                options.ServerUrl = Configuration["Log:logurl"]; //日志服务器地址
+                options.Key = config.LogsAppkey;
+                options.ServerUrl = config.LogsAppServer;
             });
             #endregion
 
@@ -164,6 +167,7 @@ namespace SupplierWebApi
 
             #region FairLogs
             app.UseFairhrLogs();
+            //全局异常？
             app.UseExceptionHandler(errorApp =>
             {
                 errorApp.Run(async context =>
