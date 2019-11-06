@@ -25,7 +25,7 @@ namespace SupplierWebApi.Controllers
         [HttpGet]
         public string Get()
         {
-            return config.Value.ConnectionStrings;
+            return config.Value.SystemId;
         }
     }
 }

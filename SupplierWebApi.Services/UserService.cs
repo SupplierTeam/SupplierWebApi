@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Fairhr.Logs;
 
 namespace SupplierWebApi.Services
 {
@@ -17,9 +18,12 @@ namespace SupplierWebApi.Services
     public class UserService : BaseService<User, IUserRepository>, IUserService
     {
         public IConfiguration Configuration { get; }
+
+        public ConfigMsg config { get; }
         public UserService(IUserRepository Repository, IConfiguration theconfiguration) : base(Repository)
         {
             this.Configuration = theconfiguration;
+             config = JsonHelper.NewtonsoftDeserialize<ConfigMsg>(Configuration.GetSection("AppSetting").Value);
         }
 
         public List<User> GetUser(int pageIndex, int limit, string userName, out int count)
@@ -40,16 +44,17 @@ namespace SupplierWebApi.Services
                     {
                         UserName = userName,
                         Password = password,
-                        SystemId = Configuration.GetSection("AppSettings")["systemId"]
+                        SystemId = config.SystemId
                     };
-                    string url = Configuration.GetSection("AppSettings")["AuthorithApiAddress"] + "/api/Public/Login";
+                    string url = config.AuthorithApiAddress+"/api/Public/Login";
                     Uri uri = new Uri(url);
 
                     result = JsonHelper.NewtonsoftDeserialize<LoginUserDto>(HttpRequestHelper.HttpPostJson(uri, JsonHelper.NewtonsoftSerialiize(info))).UserId;
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    FairhrLogs.Debug(ex.Message);
                     return result;
                 }
             }

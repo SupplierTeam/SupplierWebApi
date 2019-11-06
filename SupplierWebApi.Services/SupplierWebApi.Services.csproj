@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fairhr.Logs" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SupplierWebApi.Framework\SupplierWebApi.Framework.csproj" />
     <ProjectReference Include="..\SupplierWebApi.IRepositories\SupplierWebApi.IRepositories.csproj" />
     <ProjectReference Include="..\SupplierWebApi.IServices\SupplierWebApi.IServices.csproj" />

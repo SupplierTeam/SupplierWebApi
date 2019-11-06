@@ -8,6 +8,7 @@ namespace SupplierWebApi.Models
     {
         public string ConnectionStrings { get; set; }
         public string AuthorithApiAddress { get; set; }
+        
         public string AuthorizationCenterAddress { get; set; }
         public string RedisAddress { get; set; }
 
@@ -25,6 +26,8 @@ namespace SupplierWebApi.Models
         public int FtpPort { get; set; }
         public string LogsAppkey { get; set; }
         public string LogsAppServer { get; set; }
+
+        public string SystemId { get; set; }
 
     }
 }
