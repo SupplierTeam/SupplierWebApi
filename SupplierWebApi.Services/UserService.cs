@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace SupplierWebApi.Services
 {
-   
+
 
     public class UserService : BaseService<User, IUserRepository>, IUserService
     {
@@ -70,8 +70,8 @@ namespace SupplierWebApi.Services
         /// <returns>bool</returns>
         public bool EditUser(string newPassword)
         {
-           
-            return  false;
+
+            return false;
         }
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace SupplierWebApi.Services
         public async Task<bool> EditUserInfoAsync(User userInfo)
         {
 
-            return await Task.Run(()=> false); 
-           
+            return await Task.Run(() => false);
+
         }
 
         /// <summary>
