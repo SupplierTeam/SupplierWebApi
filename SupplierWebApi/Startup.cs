@@ -8,8 +8,11 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
+using Fairhr.Logs;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.PlatformAbstractions;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +24,7 @@ using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using SupplierWebApi.Framework;
+using SupplierWebApi.Models;
 using SupplierWebApi.Models.DataContext;
 
 namespace SupplierWebApi
@@ -112,7 +116,16 @@ namespace SupplierWebApi
 
             #endregion
 
-        
+            #region FairLogs
+            services.AddFairhrLogs(options =>
+            {
+                options.Key = Configuration["Log:logkey"]; 
+                options.ServerUrl = Configuration["Log:logurl"]; //日志服务器地址
+            });
+            #endregion
+
+
+
             services.AddControllers();
 
            
@@ -139,6 +152,27 @@ namespace SupplierWebApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            #region FairLogs
+            app.UseFairhrLogs();
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    FairhrLogs.Error("异常：" + context.Features.Get<IExceptionHandlerFeature>().Error.Message);
+                    ResultData result = new ResultData()
+                    {
+
+                        Code = 500,
+                        Msg = context.Features.Get<IExceptionHandlerFeature>().Error.Message,
+                        Count = 0,
+                        Data = ""
+                    };
+                    await context.Response.WriteAsync(JsonHelper.NewtonsoftSerialiize(result));
+                });
+            });
+            #endregion
+
 
             app.UseEndpoints(endpoints =>
             {

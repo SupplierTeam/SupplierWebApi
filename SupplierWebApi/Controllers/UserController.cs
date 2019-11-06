@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fairhr.Logs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SupplierWebApi.IServices;
@@ -30,10 +31,11 @@ namespace SupplierWebApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(User user)
         {
-
+          
 
             if (!string.IsNullOrEmpty(user.UserName) && !string.IsNullOrEmpty(user.Password))
             {
+                //throw new Exception("login error");
                 bool result = false;
                 string userId = await userService.LoginAsync(user.UserName, user.Password);
                 if (!string.IsNullOrEmpty(userId))
