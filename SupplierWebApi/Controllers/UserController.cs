@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SupplierWebApi.IRepositories;
+using SupplierWebApi.IServices;
 using SupplierWebApi.Models;
 using SupplierWebApi.Models.Domain;
 
@@ -11,17 +12,17 @@ namespace SupplierWebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository userRepository1;
+        private readonly IUserService userService;
 
-        public UserController(IUserRepository userRepository1)
+        public UserController(IUserService userService)
         {
-            this.userRepository1 = userRepository1;
+            this.userService = userService;
         }
 
         [HttpGet("GetUserById/{id}")]
         public ResultData GetUserById(string id)
         {
-            var model = userRepository1.GetUserById(id);
+            var model = userService.GetUserById(id);
             return new ResultData()
             {
                 Count = 1,
@@ -34,7 +35,7 @@ namespace SupplierWebApi.Controllers
         [HttpGet("GetUserAll")]
         public ResultData GetUserAll()
         {
-            var list = userRepository1.GetUserAll();
+            var list = userService.GetUserAll();
             return new ResultData()
             {
                 Count = 1,
@@ -47,7 +48,7 @@ namespace SupplierWebApi.Controllers
         [HttpPost("AddUser")]
         public ResultData AddUser(User user)
         {
-            var result = userRepository1.AddUser(user);
+            var result = userService.AddUser(user);
             if (result)
             {
                 return new ResultData()
@@ -73,7 +74,7 @@ namespace SupplierWebApi.Controllers
         [HttpPost("AddUserList")]
         public ResultData AddUserList(List<User> userList)
         {
-            if (userRepository1.AddUserList(userList))
+            if (userService.AddUserList(userList))
             {
                 return new ResultData()
                 {
@@ -98,7 +99,7 @@ namespace SupplierWebApi.Controllers
         [HttpPost("UpdateUser")]
         public ResultData UpdateUser(User user)
         {
-            var result = userRepository1.UpdateUser(user);
+            var result = userService.UpdateUser(user);
             if (result)
             {
                 return new ResultData()
@@ -124,7 +125,7 @@ namespace SupplierWebApi.Controllers
         [HttpPost("UpdateUserList")]
         public ResultData UpdateUserList(List<User> userList)
         {
-            if (userRepository1.UpdateUserList(userList))
+            if (userService.UpdateUserList(userList))
             {
                 return new ResultData()
                 {
@@ -149,7 +150,7 @@ namespace SupplierWebApi.Controllers
         [HttpPost("DeleteUser")]
         public ResultData DeleteUser(User user)
         {
-            var result = userRepository1.AddUser(user);
+            var result = userService.AddUser(user);
             if (result)
             {
                 return new ResultData()
@@ -175,7 +176,7 @@ namespace SupplierWebApi.Controllers
         [HttpPost("QuerySql")]
         public ResultData QuerySql(int pageIndex, int pageSize)
         {
-            var list = userRepository1.GetUserPageList(pageIndex, pageSize);
+            var list = userService.GetUserPageList(pageIndex, pageSize);
             return new ResultData()
             {
                 Count = 1,
@@ -188,7 +189,7 @@ namespace SupplierWebApi.Controllers
         [HttpPost("ExecuteSql")]
         public int ExecuteSql()
         {
-            return userRepository1.ExecuteSql();
+            return userService.ExecuteSql();
         }
 
     }
