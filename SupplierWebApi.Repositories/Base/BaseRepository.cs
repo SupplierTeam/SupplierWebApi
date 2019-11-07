@@ -1,315 +1,259 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SupplierWebApi.IRepositories.Base;
-using SupplierWebApi.Models.DataContext;
+﻿using SupplierWebApi.IRepositories.Base;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Dapper;
+using Dapper.Contrib.Extensions;
+using SupplierWebApi.Dapper.Connections;
+using SupplierWebApi.Dapper.DapperHelpers;
 
 namespace SupplierWebApi.Repositories.Base
 {
-    public class BaseRepository<T> : IBaseRepository<T>
-       where T : class
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity>
+       where TEntity : class
     {
-#pragma warning disable SA1401 // Fields must be private
-#pragma warning disable CA1051 // Do not declare visible instance fields
-        protected SupplierdbContext db;
-#pragma warning restore CA1051 // Do not declare visible instance fields
-#pragma warning restore SA1401 // Fields must be private
+        protected SupDbConnetion _supDbConnetion;
 
-        public BaseRepository(SupplierdbContext supbackdbContext)
+        public BaseRepository()
         {
-            db = supbackdbContext;
+            _supDbConnetion = new SupDbConnetion();
         }
 
         /// <summary>
-        /// 增加一条记录
+        /// 根据主键Id获取实体
         /// </summary>
-        /// <param name="entity">实体模型</param>
-        /// <returns>bool</returns>
-        public virtual bool Save(T entity)
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public TEntity FindById(string id)
         {
-            db.Set<T>().Add(entity);
-            return db.SaveChanges() > 0;
-        }
-
-        /// <summary>
-        /// 更新一条记录
-        /// </summary>
-        /// <param name="entity">实体模型</param>
-        /// <returns>bool</returns>
-        public virtual async Task<bool> SaveAsync(T entity)
-        {
-            await db.Set<T>().AddAsync(entity);
-            return await db.SaveChangesAsync() > 0;
-        }
-
-        /// <summary>
-        /// 更新一条记录
-        /// </summary>
-        /// <param name="entity">实体模型</param>
-        /// <returns>bool</returns>
-        public virtual bool Update(T entity)
-        {
-            try
+            if (string.IsNullOrEmpty(id))
             {
-                db.Set<T>().Attach(entity);
-                db.Entry(entity).State = EntityState.Modified;
-                return db.SaveChanges() > 0;
+                return null;
             }
-            catch (Exception)
+            using (var conn = _supDbConnetion.GetDbConnection())
             {
-                throw;
+                return conn.Get<TEntity>(id);
             }
         }
 
         /// <summary>
-        /// 更新一条记录（异步方式）
+        /// 新增实体
         /// </summary>
-        /// <param name="entity">实体模型</param>
-        /// <returns>bool</returns>
-        public virtual async Task<bool> UpdateAsync(T entity)
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool Add(TEntity entity)
         {
-            try
+            if (entity == null)
             {
-                db.Set<T>().Attach(entity);
-                db.Entry(entity).State = EntityState.Modified;
-                return await db.SaveChangesAsync() > 0;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        /// <summary>
-        /// 通过Lamda表达式获取实体
-        /// </summary>
-        /// <param name="predicate">Lamda表达式（p=>p.Id==Id）</param>
-        /// <returns>T</returns>
-        public T Get(Expression<Func<T, bool>> predicate)
-        {
-            return db.Set<T>().FirstOrDefault(predicate);
-        }
-
-        /// <summary>
-        /// 通过Lamda表达式获取实体
-        /// </summary>
-        /// <param name="predicate">Lamda表达式（p=>p.Id==Id）</param>
-        /// <returns>T</returns>
-        public T GetNoTracking(Expression<Func<T, bool>> predicate)
-        {
-            return db.Set<T>().AsNoTracking().FirstOrDefault(predicate);
-        }
-
-        /// <summary>
-        /// 通过Lamda表达式获取实体（异步方式）
-        /// </summary>
-        /// <param name="predicate">Lamda表达式（p=>p.Id==Id）</param>
-        /// <returns>T</returns>
-        public async Task<T> GetAsync(Expression<Func<T, bool>> predicate)
-        {
-            return await db.Set<T>().FirstOrDefaultAsync(predicate);
-        }
-
-        /// <summary>
-        /// 增加多条记录，同一模型
-        /// </summary>
-        /// <param name="list">实体模型集合</param>
-        /// <returns>bool</returns>
-        public virtual bool SaveList(List<T> list)
-        {
-            bool result = false;
-            if (list == null || list.Count == 0)
-            {
-                return result;
+                return false;
             }
 
-            using (var tran = db.Database.BeginTransaction())
+            using (var conn = _supDbConnetion.GetDbConnection())
             {
-                try
+                var identity = conn.Insert(entity);
+                return identity > 0;
+            }
+        }
+
+        /// <summary>
+        /// 批量新增
+        /// </summary>
+        /// <param name="entityList"></param>   
+        /// <param name="commandTimeout"></param>
+        /// <returns></returns>
+        public bool AddList(List<TEntity> entityList, int? commandTimeout = null)
+        {
+            if (!entityList.Any())
+            {
+                return false;
+            }
+            var result = true;
+            using (var conn = _supDbConnetion.GetDbConnection())
+            {
+                //开启事务
+                using (var tran = conn.TranStart())
                 {
-                    list.ForEach(item =>
+                    try
                     {
-                        db.Set<T>().Add(item);
-                    });
-                    db.SaveChanges();
-                    tran.Commit();
-                    result = true;
-                }
-                catch (Exception ex)
-                {
-                    result = false;
-                    tran.Rollback();
-                    throw new Exception(ex.ToString());
+                        var identity = conn.Insert(entityList, tran, commandTimeout);
+                        result = identity > 0;
+                        conn.TranCommit(tran);
+                    }
+                    catch (Exception e)
+                    {
+                        conn.TranRollBack(tran);
+                        result = false;
+                        throw new Exception(e.Message);
+                    }
                 }
             }
-
             return result;
         }
 
         /// <summary>
-        /// 增加多条记录，同一模型（异步方式）
+        /// 修改实体
         /// </summary>
-        /// <param name="list">实体模型集合</param>
-        /// <returns>bool</returns>
-        public async Task<bool> SaveListAsync(List<T> list)
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool Update(TEntity entity)
         {
-            bool result = false;
-            if (list == null || list.Count == 0)
+            if (entity == null)
             {
-                return result;
+                return false;
             }
-
-            using (var tran = db.Database.BeginTransaction())
+            using (var conn = _supDbConnetion.GetDbConnection())
             {
-                try
+                return conn.Update(entity);
+            }
+        }
+
+        /// <summary>
+        /// 批量修改
+        /// </summary>
+        /// <param name="entityList"></param>
+        /// <param name="commandTimeout"></param>
+        /// <returns></returns>
+        public bool UpdateList(List<TEntity> entityList, int? commandTimeout = null)
+        {
+            if (!entityList.Any())
+            {
+                return false;
+            }
+            var result = true;
+            using (var conn = _supDbConnetion.GetDbConnection())
+            {
+                //开启事务
+                using (var tran = conn.TranStart())
                 {
-                    list.ForEach(item =>
+                    try
                     {
-                        db.Set<T>().Add(item);
-                    });
-                    await db.SaveChangesAsync();
-                    tran.Commit();
-                    result = true;
-                }
-                catch (Exception ex)
-                {
-                    result = false;
-                    tran.Rollback();
-                    throw new Exception(ex.ToString());
+                        result = conn.Update(entityList, tran);
+                        conn.TranCommit(tran);
+                    }
+                    catch (Exception e)
+                    {
+                        conn.TranRollBack(tran);
+                        result = false;
+                        throw new Exception(e.Message);
+                    }
                 }
             }
-
             return result;
         }
 
-        public List<T> List(Expression<Func<T, bool>> expression)
-        {
-            return db.Set<T>().Where(expression).ToList();
-        }
-
         /// <summary>
-		/// 更新多条记录，同一模型
-		/// </summary>
-		/// <param name="list">实体模型集合</param>
-		/// <returns>bool</returns>
-		public bool UpdateList(List<T> list)
+        /// 删除实体
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool Delete(TEntity entity)
         {
-            bool result = false;
-            if (list == null || list.Count == 0)
+            if (entity == null)
             {
-                return result;
+                return false;
             }
-
-            using (var tran = db.Database.BeginTransaction())
+            using (var conn = _supDbConnetion.GetDbConnection())
             {
-                try
-                {
-                    list.ForEach(item =>
-                    {
-                        db.Set<T>().Update(item);
-                    });
-                    result = db.SaveChanges() > 0 ? true : false;
-                    tran.Commit();
-                }
-                catch (Exception ex)
-                {
-                    result = false;
-                    tran.Rollback();
-                    throw new Exception(ex.ToString());
-                }
+                return conn.Delete(entity);
             }
-
-            return result;
-        }
-
-        public List<T> ListAsnotracking(Expression<Func<T, bool>> expression)
-        {
-            return db.Set<T>().AsNoTracking().Where(expression).ToList();
         }
 
         /// <summary>
-        /// 获取数量
+        /// 获取所有实体
         /// </summary>
-        /// <param name="expression">expression</param>
-        /// <returns>int</returns>
-        public int GetCount(Expression<Func<T, bool>> expression)
+        /// <returns></returns>
+        public IList<TEntity> GetList(IDbTransaction tran = null, int? commandTimeout = null)
         {
-            return db.Set<T>().Where(expression).Count();
-        }
-
-        /// <summary>
-        /// 是否存在某条数据
-        /// </summary>
-        /// <param name="expression">lambda表达式</param>
-        /// <returns>bool</returns>
-        public bool IsExistence(Expression<Func<T, bool>> expression)
-        {
-            return db.Set<T>().Any(expression);
-        }
-
-        /// <summary>
-        /// 执行mysql原生语句 
-        /// </summary>
-        /// <typeparam name="TEntity">查询返回结果的Dto</typeparam>
-        /// <param name="mysql">MySQL语句</param>
-        /// <param name="timeOutNum">超时时间</param>
-        /// <param name="parameters">MySQLParameter 参数防止sql注入</param>
-        /// <returns>返回结果Dto的集合</returns>
-        public IList<TEntity> SqlQuery<TEntity>(string mysql, int? timeOutNum = null, params object[] parameters)
-            where TEntity : new()
-        {
-            //注意：不要对GetDbConnection获取到的conn进行using或者调用Dispose，否则DbContext后续不能再进行使用了，会抛异常
-            var conn = db.Database.GetDbConnection();
-            try
+            using (var conn = _supDbConnetion.GetDbConnection())
             {
-                conn.Open();
-                using var command = conn.CreateCommand();
-                if (timeOutNum.HasValue)
-                {
-                    command.CommandTimeout = timeOutNum.Value;
-                }
-                command.CommandText = mysql;
-                if (parameters.Count() > 0)
-                {
-                    command.Parameters.AddRange(parameters);
-                }
+                return conn.GetAll<TEntity>(tran, commandTimeout).ToList();
+            }
+        }
 
-                var propts = typeof(TEntity).GetProperties();
-                var rtnList = new List<TEntity>();
-                TEntity model;
-                object val;
-                using (var reader = command.ExecuteReader())
+        /// <summary>
+        /// 获取分页数据 在不用存储过程情况下
+        /// </summary>
+        /// <param name="recordCount">总记录条数</param>
+        /// <param name="selectList">选择的列逗号隔开,支持top num</param>
+        /// <param name="tableName">表名字(多表，分割)</param>
+        /// <param name="whereStr">条件字符 必须前加 and</param>
+        /// <param name="orderExpression">排序 例如 ID</param>
+        /// <param name="pageIndex">当前索引页</param>
+        /// <param name="pageSize">每页记录数</param>
+        /// <param name="param">参数（可用匿名类）</param>
+        /// <returns></returns>
+        public IList<TEntity> GetPageList(out int recordCount, string tableName, string whereStr, string orderExpression, int pageIndex, int pageSize, object param = null, string selectList = "*")
+        {
+            int rows = 0;
+            var matchs = Regex.Matches(selectList, @"top\s+\d{1,}", RegexOptions.IgnoreCase);//含有top
+            var sqlStr = $"select {selectList} from {tableName} where 1=1 {whereStr}";
+            if (!string.IsNullOrEmpty(orderExpression)) { sqlStr += $" Order by {orderExpression}"; }
+
+            using (var conn = _supDbConnetion.GetDbConnection())
+            {
+                if (matchs.Count > 0) //含有top的时候
                 {
-                    while (reader.Read())
+                    var dtTemp = conn.Query<TEntity>(sqlStr, param);
+                    rows = dtTemp.Count();
+                }
+                else //不含有top的时候
+                {
+                    string sqlCount = $"select count(*) from {tableName} where 1=1 {whereStr} ";
+                    //获取行数
+                    object obj = conn.ExecuteScalar(sqlCount, param);
+                    if (obj != null)
                     {
-                        model = new TEntity();
-                        foreach (var l in propts)
-                        {
-                            val = reader[l.Name];
-                            if (val == DBNull.Value)
-                            {
-                                l.SetValue(model, null);
-                            }
-                            else
-                            {
-                                l.SetValue(model, val);
-                            }
-                        }
-
-                        rtnList.Add(model);
+                        rows = Convert.ToInt32(obj);
                     }
                 }
 
-                return rtnList;
+                sqlStr += $" limit {(pageIndex - 1) * pageSize},{pageSize}";
+                recordCount = rows;
+                return conn.Query<TEntity>(sqlStr, param).ToList();
             }
-            finally
+        }
+
+        /// <summary>
+        /// 执行sql（查询方法）
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql">sql</param>
+        /// <param name="param">param</param>
+        /// <param name="transaction"></param>
+        /// <param name="buffered"></param>
+        /// <param name="commandTimeout"></param>
+        /// <param name="commandType"></param>
+        /// <returns></returns>
+        public List<T> SqlQuery<T>(string sql, object param = null, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null)
+        {
+            using (var conn = _supDbConnetion.GetDbConnection())
             {
-                conn.Close();
+                return conn.Query<T>(sql, param, transaction, buffered, commandTimeout, commandType).AsList();
             }
+        }
+
+        /// <summary>
+        /// 执行sql（返回受影响的行数）
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="param"></param>
+        /// <param name="transaction"></param>
+        /// <param name="buffered"></param>
+        /// <param name="commandTimeout"></param>
+        /// <param name="commandType"></param>
+        /// <returns></returns>
+        public int ExecuteSql(string sql, object param = null, IDbTransaction transaction = null, bool buffered = true, int? commandTimeout = null, CommandType? commandType = null)
+        {
+            using (var conn = _supDbConnetion.GetDbConnection())
+            {
+                return conn.Execute(sql, param, transaction, commandTimeout, commandType);
+            }
+
         }
     }
 }

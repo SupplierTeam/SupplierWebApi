@@ -1,9 +1,13 @@
 ﻿using System;
+using Dapper.Contrib.Extensions;
 
-namespace SupplierWebApi.Models
+
+namespace SupplierWebApi.Models.Domain
 {
+    [Table("User")]
     public class User
     {
+        [Key]
         public string UserId { get; set; }
 
         public string UserName { get; set; }

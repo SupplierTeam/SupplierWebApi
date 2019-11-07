@@ -1,173 +1,119 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SupplierWebApi.IRepositories;
+﻿using SupplierWebApi.IRepositories;
 using SupplierWebApi.Models;
-using SupplierWebApi.Models.DataContext;
 using SupplierWebApi.Repositories.Base;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using SupplierWebApi.Dapper.Connections;
+using SupplierWebApi.Models.Domain;
 
 namespace SupplierWebApi.Repositories
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public UserRepository(SupplierdbContext supbackdbContext)
-    : base(supbackdbContext)
+        /// <summary>
+        /// 根据主键Id获取
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public User GetUserById(string id)
         {
+            var entity = FindById(id);
+            return entity;
         }
 
         /// <summary>
-        /// 登陆
+        /// 新增员工
         /// </summary>
-        /// <param name="userName">userName</param>
-        /// <param name="password">password</param>
-        /// <returns>User</returns>
-        public async Task<User> LoginAsync(string userName, string password)
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool AddUser(User entity)
         {
-            return await db.User.Where(x => x.UserName.Equals(userName, StringComparison.Ordinal) && x.Password.Equals(password, StringComparison.Ordinal) && x.IsDelete == 0).FirstOrDefaultAsync();
-        }
-
-        public List<User> GetUser(int pageIndex, int limit, string userName, out int count)
-        {
-            var query = from a in db.User
-                        where a.IsDelete == 0
-                        && (string.IsNullOrEmpty(userName) || a.UserName.Contains(userName, StringComparison.Ordinal))
-                        select new User
-                        {
-                            UserId = a.UserId,
-                            Password = a.Password,
-                            UserName = a.UserName,
-                            IsDelete = a.IsDelete,
-                            AddTime = a.AddTime,
-                            Email = a.Email,
-                            Remark = a.Remark,
-                            TelPhone = a.TelPhone
-                        };
-            count = query.ToList().Count();
-            return query.OrderByDescending(x => x.AddTime).Skip((pageIndex - 1) * limit).Take(limit).ToList();
+            if (entity == null)
+            {
+                return false;
+            }
+            return Add(entity);
         }
 
         /// <summary>
-        /// 通过员工编号获取员工信息
+        /// 批量新增
         /// </summary>
-        /// <param name="userId">员工编号</param>
-        /// <returns>User</returns>
-        public async Task<User> Find(string userId)
+        /// <param name="entityList"></param>
+        /// <returns></returns>
+        public bool AddUserList(List<User> entityList)
         {
-            var query = from a in db.User
-                        where a.UserId.Equals(userId, StringComparison.Ordinal)
-                        && a.IsDelete == 0
-                        select new User
-                        {
-                            UserId = a.UserId,
-                            Password = a.Password,
-                            UserName = a.UserName,
-                            IsDelete = a.IsDelete,
-                            AddTime = a.AddTime,
-                            Email = a.Email,
-                            Remark = a.Remark,
-                            TelPhone = a.TelPhone
-                        };
-            return await query.FirstOrDefaultAsync();
+            if (!entityList.Any())
+            {
+                return false;
+            }
+
+            return AddList(entityList);
         }
 
         /// <summary>
-        /// 修改用户信息
+        /// 编辑员工
         /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <returns>bool</returns>
-        public User EditUserInfo(User userInfo)
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool UpdateUser(User entity)
         {
-            try
+            if (entity == null)
             {
-                db.User.Attach(userInfo);
-            }
-            catch (Exception ex)
-            {
-                db.User.Add(userInfo);
-              
+                return false;
             }
 
-            db.Entry(userInfo).State = EntityState.Modified;
-            db.Entry(userInfo).Property("UserId").IsModified = false;
-            db.Entry(userInfo).Property("IsDelete").IsModified = false;
-            db.Entry(userInfo).Property("AddTime").IsModified = false;
-
-            if (db.SaveChanges() > 0)
-            {
-                return userInfo;
-            }
-
-            return null;
+            return Update(entity);
         }
 
         /// <summary>
-        /// 添加用户
+        /// 批量编辑
         /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <returns>bool</returns>
-        public async Task<User> AddUserInfo(User userInfo)
+        /// <param name="entityList"></param>
+        /// <returns></returns>
+        public bool UpdateUserList(List<User> entityList)
         {
-            userInfo.UserId = Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture);
-            userInfo.AddTime = DateTime.Now;
-            userInfo.IsDelete = 0;
-            db.User.Add(userInfo);
-            await db.SaveChangesAsync();
-            return userInfo;
+            if (!entityList.Any())
+            {
+                return false;
+            }
+
+            return UpdateList(entityList);
         }
 
         /// <summary>
-        /// 删除用户
+        /// 删除员工
         /// </summary>
-        /// <param name="ids">用户编号集合</param>
-        /// <returns>bool</returns>
-        public async Task<bool> DeleteUserInfo(string[] ids)
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool DeleteUser(string id)
         {
-            bool result = false;
-            List<User> users = await db.User.Where(x => x.IsDelete == 0 && ids.Contains(x.UserId)).ToListAsync();
-            if (users.Count > 0)
+            if (string.IsNullOrEmpty(id))
             {
-                users.ForEach(item =>
-                {
-                    // 删除用户
-                    item.IsDelete = 1;
-                    db.Entry(item).State = EntityState.Modified;
-                });
-                await db.SaveChangesAsync();
-                result = true;
+                return false;
             }
 
-            return result;
+            return Delete(new User { UserId = id });
         }
 
-        public async Task<bool> ReverseDeleteUserInfo(string[] ids)
+        public IList<User> GetUserAll()
         {
-            bool result = false;
-            List<User> users = await db.User.Where(x => x.IsDelete == 1 && ids.Contains(x.UserId)).ToListAsync();
-            if (users.Count > 0)
-            {
-                users.ForEach(item =>
-                {
-                    // 撤销删除用户
-                    item.IsDelete = 0;
-                    db.Entry(item).State = EntityState.Modified;
-                });
-                await db.SaveChangesAsync();
-                result = true;
-            }
-
-            return result;
+            return GetList();
         }
 
-        public async Task<bool> DeleteUserTrue(string ids)
+        public IList<User> GetUserPageList(int pageIndex = 1, int pageSize = 5)
         {
-            User user = await db.User.FirstOrDefaultAsync(x => x.IsDelete == 0 && x.UserId == ids);
-            db.User.Remove(user);
-            db.Entry(user).State = EntityState.Deleted;
-            await db.SaveChangesAsync();
-            return true;
+            var count = 0;
+            return GetPageList(out count, "user", "And user.IsDelete=@Isdelete", "username", pageIndex, pageSize, new { Isdelete = 0 });
+        }
+
+        public int ExecuteSql()
+        {
+            var sqlQuery = "select * from user";
+            return ExecuteSql(sqlQuery);
         }
     }
 }

@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SupplierWebApi.Dapper\SupplierWebApi.Dapper.csproj" />
     <ProjectReference Include="..\SupplierWebApi.IRepositories\SupplierWebApi.IRepositories.csproj" />
-    <ProjectReference Include="..\SupplierWebApi.Models\SupplierWebApi.Models.csproj" />
   </ItemGroup>
 
 </Project>
