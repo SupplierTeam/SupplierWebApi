@@ -14,6 +14,7 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Autofac.Extras.DynamicProxy" Version="4.5.0" />
     <PackageReference Include="Com.Ctrip.Framework.Apollo.Configuration" Version="2.1.0" />
+    <PackageReference Include="Fairhr.ApiGateWay.Sdk" Version="1.0.0" />
     <PackageReference Include="Fairhr.Logs" Version="1.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0-preview2.19525.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0-preview2.19525.5">
