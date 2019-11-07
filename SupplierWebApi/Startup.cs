@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Autofac.Extras.DynamicProxy;
-using Fairhr.ApiGateWay;
 using Fairhr.Logs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
@@ -133,18 +132,7 @@ namespace SupplierWebApi
             });
             #endregion
 
-            #region FarihrGetWay
-            services.AddFarihrGetWay(options =>
-            {
-                options.AppKey = "203749203";
-                options.AppSecret = "u7a2xn3g8bt7saylu25vyp561fvpnwt9";
-                // api网关地址
-                options.Host = "http://api.fanyouvip.com";
-                // 配置环境变量
-                options.Environment = "TEST";
 
-            });
-            #endregion
 
             services.AddControllers();
 
