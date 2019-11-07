@@ -5,6 +5,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Com.Ctrip.Framework.Apollo;
+using SupplierWebApi.Framework;
+using SupplierWebApi.Models;
 
 namespace SupplierWebApi.Dapper.Connections
 {
@@ -14,18 +17,12 @@ namespace SupplierWebApi.Dapper.Connections
 
         public ConfigurationHelper()
         {
-            IHostEnvironment env = MyServiceProvider.ServiceProvider.GetRequiredService<IHostEnvironment>();
-            config = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                //.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables()
-                .Build();
+            config = MyServiceProvider.ServiceProvider.GetRequiredService<IConfiguration>();
         }
 
         public string GetConnectionString()
         {
-            return config.GetSection("ConnectionStrings")["SupBack"];
+            return JsonHelper.NewtonsoftDeserialize<ConfigMsga>(config.GetSection("AppSetting").Value).ConnectionStrings;
         }
     }
 }

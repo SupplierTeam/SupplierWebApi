@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DapperExtensions;
 using SupplierWebApi.Dapper.Connections;
 using SupplierWebApi.Dapper.DapperHelpers;
 

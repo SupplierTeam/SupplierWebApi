@@ -14,4 +14,8 @@
     <ProjectReference Include="..\SupplierWebApi.IServices\SupplierWebApi.IServices.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Base\" />
+  </ItemGroup>
+
 </Project>

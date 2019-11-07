@@ -15,8 +15,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.PlatformAbstractions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,7 +25,6 @@ using Microsoft.OpenApi.Models;
 using SupplierWebApi.Dapper.Connections;
 using SupplierWebApi.Framework;
 using SupplierWebApi.Models;
-using SupplierWebApi.Models.DataContext;
 
 namespace SupplierWebApi
 {
@@ -81,12 +78,12 @@ namespace SupplierWebApi
 
 
             #region Mysql
-            services.AddDbContextPool<SupplierdbContext>(options =>
-            {
+            //services.AddDbContextPool<SupplierdbContext>(options =>
+            //{
 
-                options.UseMySql(config.ConnectionStrings);
-                options.EnableSensitiveDataLogging(true);
-            });
+            //    options.UseMySql(config.ConnectionStrings);
+            //    options.EnableSensitiveDataLogging(true);
+            //});
             #endregion
 
             #region Swagger
@@ -194,21 +191,21 @@ namespace SupplierWebApi
         }
     }
 
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<SupplierdbContext>
-    {
+    //public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<SupplierdbContext>
+    //{
 
-        public SupplierdbContext CreateDbContext(string[] args)
-        {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT ");
+    //    public SupplierdbContext CreateDbContext(string[] args)
+    //    {
+    //        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT ");
 
-            IConfigurationRoot configuration = new ConfigurationBuilder()
-           .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile($"appsettings.Development.json")//应该修改为环境变量的appsettings.json
-           .Build();
-            var builder = new DbContextOptionsBuilder<SupplierdbContext>();
-            builder.UseMySql(configuration.GetConnectionString("SupBack"));
-            return new SupplierdbContext(builder.Options);
-        }
-    }
+    //        IConfigurationRoot configuration = new ConfigurationBuilder()
+    //       .SetBasePath(Directory.GetCurrentDirectory())
+    //       .AddJsonFile($"appsettings.Development.json")//应该修改为环境变量的appsettings.json
+    //       .Build();
+    //        var builder = new DbContextOptionsBuilder<SupplierdbContext>();
+    //        builder.UseMySql(configuration.GetConnectionString("SupBack"));
+    //        return new SupplierdbContext(builder.Options);
+    //    }
+    //}
 
 }

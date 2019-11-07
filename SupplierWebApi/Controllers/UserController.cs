@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Fairhr.Logs;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using SupplierWebApi.IRepositories;
-using SupplierWebApi.IServices;
 using SupplierWebApi.Models;
-using SupplierWebApi.Services;
+using SupplierWebApi.Models.Domain;
 
 
 namespace SupplierWebApi.Controllers
@@ -17,49 +11,12 @@ namespace SupplierWebApi.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserService userService;
-        private readonly IUserRepository1 userRepository1;
+        private readonly IUserRepository userRepository1;
 
-        public UserController(IUserService userLogicHandler, IUserRepository1 userRepository1)
+        public UserController(IUserRepository userRepository1)
         {
-            userService = userLogicHandler;
             this.userRepository1 = userRepository1;
         }
-
-        ///// <summary>
-        ///// 登录
-        ///// </summary>
-        ///// <param name="user"></param>
-        ///// <returns></returns>
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login(User user)
-        //{
-        //throw new Exception("login error");
-        //bool result = false;
-        //string userId = await userService.LoginAsync(user.UserName, user.Password);
-        //    if (!string.IsNullOrEmpty(userId))
-
-        //    if (!string.IsNullOrEmpty(user.UserName) && !string.IsNullOrEmpty(user.Password))
-        //    {
-        //        //throw new Exception("login error");
-        //        bool result = false;
-        //        string userId = await userService.LoginAsync(user.UserName, user.Password);
-        //        if (!string.IsNullOrEmpty(userId))
-        //        {
-        //            //CacheData data = new CacheData();
-        //            //data.UserId = userId.Trim('"');
-        //            //data.UserName = user.UserName;
-        //            //SessionHelper.SetAuthorityInfo(data);
-        //            result = true;
-        //        }
-
-        //        return Ok(result);
-        //    }
-        //    else
-        //    {
-        //        return BadRequest("请求参数不能为空。");
-        //    }
-        //}
 
         [HttpGet("GetUserById/{id}")]
         public ResultData GetUserById(string id)
@@ -113,6 +70,82 @@ namespace SupplierWebApi.Controllers
             }
         }
 
+        [HttpPost("AddUserList")]
+        public ResultData AddUserList(List<User> userList)
+        {
+            if (userRepository1.AddUserList(userList))
+            {
+                return new ResultData()
+                {
+                    Count = userList.Count,
+                    Data = userList,
+                    Code = 200,
+                    Msg = ""
+                };
+            }
+            else
+            {
+                return new ResultData()
+                {
+                    Count = 0,
+                    Data = null,
+                    Code = 500,
+                    Msg = ""
+                };
+            }
+        }
+
+        [HttpPost("UpdateUser")]
+        public ResultData UpdateUser(User user)
+        {
+            var result = userRepository1.UpdateUser(user);
+            if (result)
+            {
+                return new ResultData()
+                {
+                    Count = 1,
+                    Data = result,
+                    Code = 200,
+                    Msg = ""
+                };
+            }
+            else
+            {
+                return new ResultData()
+                {
+                    Count = 1,
+                    Data = result,
+                    Code = 500,
+                    Msg = ""
+                };
+            }
+        }
+
+        [HttpPost("UpdateUserList")]
+        public ResultData UpdateUserList(List<User> userList)
+        {
+            if (userRepository1.UpdateUserList(userList))
+            {
+                return new ResultData()
+                {
+                    Count = userList.Count,
+                    Data = userList,
+                    Code = 200,
+                    Msg = ""
+                };
+            }
+            else
+            {
+                return new ResultData()
+                {
+                    Count = 0,
+                    Data = null,
+                    Code = 500,
+                    Msg = ""
+                };
+            }
+        }
+
         [HttpPost("DeleteUser")]
         public ResultData DeleteUser(User user)
         {
@@ -137,6 +170,25 @@ namespace SupplierWebApi.Controllers
                     Msg = ""
                 };
             }
+        }
+
+        [HttpPost("QuerySql")]
+        public ResultData QuerySql()
+        {
+            var list = userRepository1.GetUserPageList();
+            return new ResultData()
+            {
+                Count = 1,
+                Data = list,
+                Code = 200,
+                Msg = ""
+            };
+        }
+
+        [HttpPost("ExecuteSql")]
+        public int ExecuteSql()
+        {
+            return userRepository1.ExecuteSql();
         }
 
     }

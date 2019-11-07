@@ -8,4 +8,8 @@
     <ProjectReference Include="..\SupplierWebApi.Models\SupplierWebApi.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Base\" />
+  </ItemGroup>
+
 </Project>
