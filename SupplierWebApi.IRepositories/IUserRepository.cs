@@ -22,7 +22,7 @@ namespace SupplierWebApi.IRepositories
 
         IList<User> GetUserAll();
 
-        IList<User> GetUserPageList();
+        IList<User> GetUserPageList(int pageIndex = 0, int pageSize = 5);
 
         int ExecuteSql();
     }

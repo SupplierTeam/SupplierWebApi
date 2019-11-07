@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Dapper;
 using Dapper.Contrib.Extensions;
@@ -16,7 +17,7 @@ namespace SupplierWebApi.Repositories.Base
     public class BaseRepository<TEntity> : IBaseRepository<TEntity>
        where TEntity : class
     {
-        private SupDbConnetion _supDbConnetion;
+        protected SupDbConnetion _supDbConnetion;
 
         public BaseRepository()
         {
@@ -175,10 +176,52 @@ namespace SupplierWebApi.Repositories.Base
         }
 
         /// <summary>
+        /// 获取分页数据 在不用存储过程情况下
+        /// </summary>
+        /// <param name="recordCount">总记录条数</param>
+        /// <param name="selectList">选择的列逗号隔开,支持top num</param>
+        /// <param name="tableName">表名字(多表，分割)</param>
+        /// <param name="whereStr">条件字符 必须前加 and</param>
+        /// <param name="orderExpression">排序 例如 ID</param>
+        /// <param name="pageIndex">当前索引页</param>
+        /// <param name="pageSize">每页记录数</param>
+        /// <param name="param">参数（可用匿名类）</param>
+        /// <returns></returns>
+        public IList<TEntity> GetPageList(out int recordCount, string tableName, string whereStr, string orderExpression, int pageIndex, int pageSize, object param = null, string selectList = "*")
+        {
+            int rows = 0;
+            var matchs = Regex.Matches(selectList, @"top\s+\d{1,}", RegexOptions.IgnoreCase);//含有top
+            var sqlStr = $"select {selectList} from {tableName} where 1=1 {whereStr}";
+            if (!string.IsNullOrEmpty(orderExpression)) { sqlStr += $" Order by {orderExpression}"; }
+
+            using (var conn = _supDbConnetion.GetDbConnection())
+            {
+                if (matchs.Count > 0) //含有top的时候
+                {
+                    var dtTemp = conn.Query<TEntity>(sqlStr, param);
+                    rows = dtTemp.Count();
+                }
+                else //不含有top的时候
+                {
+                    string sqlCount = $"select count(*) from {tableName} where 1=1 {whereStr} ";
+                    //获取行数
+                    object obj = conn.ExecuteScalar(sqlCount, param);
+                    if (obj != null)
+                    {
+                        rows = Convert.ToInt32(obj);
+                    }
+                }
+
+                sqlStr += $" limit {(pageIndex - 1) * pageSize},{pageSize}";
+                recordCount = rows;
+                return conn.Query<TEntity>(sqlStr, param).ToList();
+            }
+        }
+
+        /// <summary>
         /// 执行sql（查询方法）
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="connection"></param>
         /// <param name="sql">sql</param>
         /// <param name="param">param</param>
         /// <param name="transaction"></param>
@@ -197,7 +240,6 @@ namespace SupplierWebApi.Repositories.Base
         /// <summary>
         /// 执行sql（返回受影响的行数）
         /// </summary>
-        /// <param name="connection"></param>
         /// <param name="sql"></param>
         /// <param name="param"></param>
         /// <param name="transaction"></param>

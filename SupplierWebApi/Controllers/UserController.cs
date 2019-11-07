@@ -173,9 +173,9 @@ namespace SupplierWebApi.Controllers
         }
 
         [HttpPost("QuerySql")]
-        public ResultData QuerySql()
+        public ResultData QuerySql(int pageIndex, int pageSize)
         {
-            var list = userRepository1.GetUserPageList();
+            var list = userRepository1.GetUserPageList(pageIndex, pageSize);
             return new ResultData()
             {
                 Count = 1,

@@ -104,10 +104,10 @@ namespace SupplierWebApi.Repositories
             return GetList();
         }
 
-        public IList<User> GetUserPageList()
+        public IList<User> GetUserPageList(int pageIndex = 1, int pageSize = 5)
         {
-            var sqlQuery = "select * from user";
-            return SqlQuery<User>(sqlQuery);
+            var count = 0;
+            return GetPageList(out count, "user", "And user.IsDelete=@Isdelete", "username", pageIndex, pageSize, new { Isdelete = 0 });
         }
 
         public int ExecuteSql()

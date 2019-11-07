@@ -10,7 +10,7 @@ namespace SupplierWebApi.Dapper.Connections
     public class SupDbConnetion : IDisposable
     {
         private readonly string _dbConnection;
-        public IConfiguration config { get; }
+        //public IConfiguration config { get; }
         private readonly IList<MySqlConnection> connections = new List<MySqlConnection>();
 
         public SupDbConnetion()
