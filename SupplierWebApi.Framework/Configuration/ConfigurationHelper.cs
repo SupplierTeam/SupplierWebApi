@@ -20,5 +20,10 @@ namespace SupplierWebApi.Framework
             return JsonHelper.NewtonsoftDeserialize<ConfigMsg>(config.GetSection("AppSetting").Value).ConnectionStrings;
         }
 
+        public static string GetRedisConnectionString()
+        {
+            return JsonHelper.NewtonsoftDeserialize<ConfigMsg>(config.GetSection("AppSetting").Value).RedisAddress;
+        }
+
     }
 }

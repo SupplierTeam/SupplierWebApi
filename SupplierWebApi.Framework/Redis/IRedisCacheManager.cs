@@ -20,7 +20,7 @@ namespace SupplierWebApi.Framework.Redis
         void Set(string key, object value, TimeSpan cacheTime);
 
         //判断是否存在
-        bool Get(string key);
+        bool KeyExists(string key);
 
         //移除某一个缓存值
         void Remove(string key);

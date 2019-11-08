@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.DotNet.PlatformAbstractions;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +25,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using SupplierWebApi.Dapper.Connections;
 using SupplierWebApi.Framework;
+using SupplierWebApi.Framework.Redis;
 using SupplierWebApi.Models;
 
 namespace SupplierWebApi
@@ -74,8 +76,15 @@ namespace SupplierWebApi
 
             //在apollo中配置文件是Json格式。项目中建立对于的实体
             services.ConfigureJsonValue<ConfigMsg>(Configuration.GetSection("AppSetting"));
+            //注册Redis
+            services.AddSingleton<IRedisCacheManager, RedisCacheManager>();
 
+            //var csredis = new CSRedis.CSRedisClient(null, config.RedisAddress);
 
+            ////初始化 RedisHelper
+            //RedisHelper.Initialization(csredis);
+            ////注册mvc分布式缓存
+            //services.AddSingleton<IDistributedCache>(new Microsoft.Extensions.Caching.Redis.CSRedisCache(RedisHelper.Instance));
 
             #region Mysql
             //services.AddDbContextPool<SupplierdbContext>(options =>

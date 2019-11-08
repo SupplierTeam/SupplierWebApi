@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using SupplierWebApi.Framework.Redis;
 using SupplierWebApi.IRepositories;
 using SupplierWebApi.IServices;
 using SupplierWebApi.Models;
@@ -13,18 +15,21 @@ namespace SupplierWebApi.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService userService;
+        readonly IRedisCacheManager _redisCacheManager;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IRedisCacheManager _redisCacheManager)
         {
             this.userService = userService;
+            this._redisCacheManager = _redisCacheManager;
         }
 
         [HttpGet("GetUserById/{id}")]
         public ResultData GetUserById(string id)
         {
-          
-
-            var model = userService.GetUserById(id);
+            //var exist = _redisCacheManager.KeyExists(id);
+            //_redisCacheManager.Set(id,"111111", TimeSpan.FromSeconds(200));
+            //var val = _redisCacheManager.GetValue(id);
+              var model = userService.GetUserById(id);
             return new ResultData()
             {
                 Count = 1,
