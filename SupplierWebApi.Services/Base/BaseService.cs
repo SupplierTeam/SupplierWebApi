@@ -8,6 +8,7 @@ using System.Text;
 namespace SupplierWebApi.Services.Base
 {
   public  class BaseService<TEntity, TRepository> : IBaseService<TEntity>
+        where TEntity:class
          where TRepository : IBaseRepository<TEntity>
     {
         protected TRepository Repository;

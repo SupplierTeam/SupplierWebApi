@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SupplierWebApi.Models
+namespace SupplierWebApi.Framework
 {
-    public class ConfigMsga
+    public class ConfigMsg
     {
         public string ConnectionStrings { get; set; }
         public string AuthorithApiAddress { get; set; }

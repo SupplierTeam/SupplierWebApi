@@ -5,8 +5,9 @@ using System.Text;
 
 namespace SupplierWebApi.IRepositories.Base
 {
-    public interface IBaseRepository<TEntity>
+    public interface IBaseRepository<TEntity> where TEntity : class
     {
+
         TEntity FindById(string id);
 
         bool Add(TEntity entity);

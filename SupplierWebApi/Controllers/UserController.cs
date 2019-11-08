@@ -22,6 +22,8 @@ namespace SupplierWebApi.Controllers
         [HttpGet("GetUserById/{id}")]
         public ResultData GetUserById(string id)
         {
+          
+
             var model = userService.GetUserById(id);
             return new ResultData()
             {

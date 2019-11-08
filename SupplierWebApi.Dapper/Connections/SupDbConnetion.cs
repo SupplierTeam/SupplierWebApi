@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
+using SupplierWebApi.Framework;
 
 namespace SupplierWebApi.Dapper.Connections
 {
@@ -16,7 +17,7 @@ namespace SupplierWebApi.Dapper.Connections
         public SupDbConnetion()
         {
             //_dbConnection = new ConfigurationHelper().GetAppSettings<AppSetting>("ConnectionStrings").SupBack;
-            _dbConnection = new ConfigurationHelper().GetConnectionString();
+            _dbConnection = ConfigurationHelper.GetConnectionString();
         }
 
         public void Dispose()

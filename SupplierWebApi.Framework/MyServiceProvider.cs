@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SupplierWebApi.Dapper.Connections
+namespace SupplierWebApi.Framework
 {
     public class MyServiceProvider
     {
