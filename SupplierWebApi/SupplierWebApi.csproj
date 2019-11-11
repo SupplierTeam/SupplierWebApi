@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SupplierWebApi.Dapper\SupplierWebApi.Dapper.csproj" />
+    <ProjectReference Include="..\SupplierWebApi.IRepositories\SupplierWebApi.IRepositories.csproj" />
     <ProjectReference Include="..\SupplierWebApi.IServices\SupplierWebApi.IServices.csproj" />
     <ProjectReference Include="..\SupplierWebApi.Models\SupplierWebApi.Models.csproj" />
     <ProjectReference Include="..\SupplierWebApi.Repositories\SupplierWebApi.Repositories.csproj" />
